@@ -45,12 +45,11 @@ class Download(ICommand):
 
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             server_socket.bind(("0.0.0.0", 0))
+            server_socket.listen()
             ip = get_ip()
             port = int(server_socket.getsockname()[1]).to_bytes(2, byteorder='big')
 
-            server_socket.listen(1)
-
-            send_command(self.conn, f"port {','.join(ip.split('.'))},{port[0]},{port[1]}",
+            send_command(self.conn, f"port {','.join(ip.split('.'))},{port[0]},{port[1]}" + end_msg,
                          self.encoding, self.change_some_code)
             response = read_response(self.conn, self.encoding, self.change_some_code)
 
