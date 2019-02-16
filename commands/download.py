@@ -68,4 +68,7 @@ class Download(ICommand):
 
             write_bytes_to_file(file_name, download_all_from(con, int(file_size)))
 
+            con.close()
+            server_socket.close()
+
             print(read_response(self.conn, self.encoding, self.change_some_code))
