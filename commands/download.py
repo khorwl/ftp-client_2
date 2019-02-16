@@ -48,15 +48,25 @@ class Download(ICommand):
             ip = get_ip()
             port = int(server_socket.getsockname()[1]).to_bytes(2, byteorder='big')
 
-            send_command(self.conn, f"port {ip[0]},{ip[1]},{ip[2]},{ip[3]},{port[0]},{port[1]}", self.encoding, self.change_some_code)
+            server_socket.listen(1)
+
+            send_command(self.conn, f"port {','.join(ip.split('.'))},{port[0]},{port[1]}",
+                         self.encoding, self.change_some_code)
             response = read_response(self.conn, self.encoding, self.change_some_code)
 
             if response[0] != '1':
                 print(response)
                 return
 
-            server_socket.listen(1)
+            send_command(self.conn, "retr {}".format(file_name) + end_msg, self.encoding, self.change_some_code)
+            response = read_response(self.conn, self.encoding, self.change_some_code)
+
+            if response[0] != '1':
+                print(response)
+                return
 
             con, addr = server_socket.accept()
 
             write_bytes_to_file(file_name, download_all_from(con, int(file_size)))
+
+            print(read_response(self.conn, self.encoding, self.change_some_code))
