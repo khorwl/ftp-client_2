@@ -44,7 +44,7 @@ class Download(ICommand):
             print('Executing at active mode')
 
             server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            server_socket.bind(())
+            server_socket.bind(("0.0.0.0", 0))
             ip = get_ip()
             port = int(server_socket.getsockname()[1]).to_bytes(2, byteorder='big')
 
