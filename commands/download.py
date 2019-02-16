@@ -53,7 +53,7 @@ class Download(ICommand):
                          self.encoding, self.change_some_code)
             response = read_response(self.conn, self.encoding, self.change_some_code)
 
-            if response[0] != '1':
+            if response[0] != '2':
                 print(response)
                 return
 
